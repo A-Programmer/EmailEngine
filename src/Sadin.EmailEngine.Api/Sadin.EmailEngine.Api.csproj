@@ -1,15 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-preview.3.23177.8" />
+    <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sadin.EmailEngine.Application\Sadin.EmailEngine.Application.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Domain\Sadin.EmailEngine.Domain.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Infrastructure\Sadin.EmailEngine.Infrastructure.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Persistence\Sadin.EmailEngine.Persistence.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Presentation\Sadin.EmailEngine.Presentation.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Shared\Sadin.EmailEngine.Shared.csproj" />
   </ItemGroup>
 
 </Project>

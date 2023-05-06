@@ -1,9 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.5.2" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
+    <PackageReference Include="Sadin.Common" Version="1.0.7" />
+    <PackageReference Include="Scrutor" Version="4.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sadin.EmailEngine.Domain\Sadin.EmailEngine.Domain.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Infrastructure\Sadin.EmailEngine.Infrastructure.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Shared\Sadin.EmailEngine.Shared.csproj" />
+  </ItemGroup>
 
 </Project>
