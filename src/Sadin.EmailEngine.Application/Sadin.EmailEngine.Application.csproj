@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.5.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
+    <PackageReference Include="Sadin.Cms.Integration.Events" Version="1.0.3" />
     <PackageReference Include="Sadin.Common" Version="1.0.10" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
   </ItemGroup>
@@ -20,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Cms\ContactUs\EventHandlers" />
-    <Folder Include="Services\Cms\ContactUs\EventListeners" />
+    <Folder Include="Messaging" />
   </ItemGroup>
 
 </Project>
