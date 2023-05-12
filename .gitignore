@@ -12,6 +12,7 @@ src/.vs/
 **/.vscode/
 **/.idea/
 **/[Mm]igrations/
+src/Sadin.EmailEngine.Api/appsettings.Development.json
 
 ## .NET files
 **/[Dd]ebug/
