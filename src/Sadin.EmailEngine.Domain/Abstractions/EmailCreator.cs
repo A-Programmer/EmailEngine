@@ -158,5 +158,5 @@ public abstract class EmailCreator
       </body>
     </html> 
     """;
-    public abstract Email CreateEmail(string name, string recipient, string subject, string message, byte[] attachments);
+    public abstract Email CreateEmail(string recipientName, string recipientEmailAddress, string subject, string message, byte[] attachments);
 }

@@ -1,7 +1,6 @@
-using System.Net;
-using System.Net.Mail;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
-using Sadin.EmailEngine.Domain;
+using MimeKit;
 using Sadin.EmailEngine.Domain.Abstractions;
 using Sadin.EmailEngine.Domain.Aggregates.EmailAggregate;
 using Sadin.EmailEngine.Infrastructure.Models;
@@ -16,39 +15,56 @@ public sealed class CustomEmailSender : IEmailSender
     {
         _customEmailProviderConfigurations = emailConfigurations.Value;
     }
-    public void Send(EmailProvider provider, Email email)
+    public async Task SendAsync(Email email)
     {
         // TODO : Remove this line:
-        Console.WriteLine("Sending email to {0}", email.Recipient);
+        Console.WriteLine("Sending email to {0}", email.RecipientName);
         
         using (var client = new SmtpClient())
         {
-            client.Host = _customEmailProviderConfigurations.SmtpServer;
-            client.Port = _customEmailProviderConfigurations.SmtpPort;
-            client.DeliveryMethod = SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
-            client.EnableSsl = _customEmailProviderConfigurations.EnableSsl;
-            client.Credentials = new NetworkCredential(_customEmailProviderConfigurations.UserName, _customEmailProviderConfigurations.Password);
-            using (var message = new MailMessage(
-                       from: new MailAddress(_customEmailProviderConfigurations.From,"Sadin.DEV"),
-                       to: new MailAddress(email.Recipient)
-                   ))
+            try
             {
-
-                message.Subject = email.Subject;
-                message.Body = email.Body;
-
-                if (email.Attachments.Any())
-                {
-                    int i = 0;
-                    foreach (var attachment in email.Attachments)
-                    {
-                        message.Attachments.Add(new(new MemoryStream(attachment.Attachment),$"Attachment-{i}"));
-                    }
-                }
-
-                client.Send(message);
+                MimeMessage mailMessage = CreateEmailMessage(email);
+                await client.ConnectAsync(_customEmailProviderConfigurations.SmtpServer, _customEmailProviderConfigurations.SmtpPort, true);
+                client.AuthenticationMechanisms.Remove("XOAUTH2");
+                await client.AuthenticateAsync(_customEmailProviderConfigurations.UserName, _customEmailProviderConfigurations.Password);
+                await client.SendAsync(mailMessage);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                await client.DisconnectAsync(true);
+                client.Dispose();
             }
         }
+    }
+    
+    private MimeMessage CreateEmailMessage(Email message)
+    {
+        var emailMessage = new MimeMessage();
+        emailMessage.From.Add(new MailboxAddress("Sadin.DEV", _customEmailProviderConfigurations.From));
+        emailMessage.To.Add(new MailboxAddress(message.RecipientName, message.RecipientEmailAddress));
+        emailMessage.Subject = message.Subject;
+
+        var bodyBuilder = new BodyBuilder { HtmlBody = message.Body };
+
+        if (message.Attachments != null && message.Attachments.Any())
+        {
+            byte[] fileBytes;
+            foreach (var attachment in message.Attachments)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    attachment.Attachment.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
+                bodyBuilder.Attachments.Add(attachment.Attachment.FileName, fileBytes, ContentType.Parse(attachment.Attachment.ContentType));
+            }
+        }
+        emailMessage.Body = bodyBuilder.ToMessageBody();
+        return emailMessage;
     }
 }

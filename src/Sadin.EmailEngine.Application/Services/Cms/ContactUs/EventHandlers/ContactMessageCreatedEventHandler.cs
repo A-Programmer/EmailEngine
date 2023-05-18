@@ -9,6 +9,8 @@ namespace Sadin.EmailEngine.Application.Services.Cms.ContactUs.EventHandlers;
 
 public class ContactMessageCreatedEventHandler : IIntegrationEventHandler<ContactMessageCreatedEvent>
 {
+    // TODO : How should I choose the Email Provider? here or in DI container?
+    
     private readonly IEmailSender _emailSender;
     private readonly ContactMessageCreatedEmailBuilder _emailBuilder;
 
@@ -20,11 +22,9 @@ public class ContactMessageCreatedEventHandler : IIntegrationEventHandler<Contac
 
     public async Task Handle(ContactMessageCreatedEvent @event)
     {
-        // TODO : Implement
         Email email =
-            _emailBuilder.CreateEmail(@event.FullName, @event.Email, "Sadin.DEV- Your message has been received.", "", null);
-        _emailSender.Send(EmailProvider.Custom, email);
-        Console.WriteLine("\n\n\n\n Start processing event ... \n\n\n\n");
-        Console.WriteLine("\n\n\n\n\n {0} \n\n {1} \n\n\n\n", @event.FullName, @event.Email);
+            _emailBuilder.CreateEmail(@event.FullName, @event.Email,
+                "Sadin.DEV- Your message has been received.", "", null);
+        await _emailSender.SendAsync(email);
     }
 }
