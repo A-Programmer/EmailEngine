@@ -17,9 +17,6 @@ public sealed class CustomEmailSender : IEmailSender
     }
     public async Task SendAsync(Email email)
     {
-        // TODO : Remove this line:
-        Console.WriteLine("Sending email to {0}", email.RecipientName);
-        
         using (var client = new SmtpClient())
         {
             try

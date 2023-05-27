@@ -24,12 +24,13 @@ public class ContactMessageCreatedEventListener : BackgroundService
     {
         _serviceScopeFactory = serviceScopeFactory;
         var messagingOptions = options.Value;
+        
         var factory = new ConnectionFactory
         {
             HostName = messagingOptions.HostName,
             Port = messagingOptions.HostPort,
-            UserName = messagingOptions.UserName,
-            Password = messagingOptions.Password
+            // UserName = messagingOptions.UserName,
+            // Password = messagingOptions.Password
         };
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();

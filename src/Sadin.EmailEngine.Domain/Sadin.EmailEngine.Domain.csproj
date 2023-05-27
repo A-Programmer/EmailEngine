@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Cms\src\Sadin.Cms.Shared\Sadin.Cms.Shared.csproj" />
+    <ProjectReference Include="..\Sadin.EmailEngine.Shared\Sadin.EmailEngine.Shared.csproj" />
   </ItemGroup>
-
+  
 </Project>
